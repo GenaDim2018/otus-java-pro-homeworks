@@ -10,11 +10,11 @@ public class AnnotationProcessor {
         Method[] methods = cls.getDeclaredMethods();
         for (Method m : methods) {
             if (m.isAnnotationPresent(BeforeSuite.class)) {
-                executionOrder.put(m, 0);
+                executionOrder.put(m, 11);
                 continue;
             }
             if (m.isAnnotationPresent(AfterSuite.class)) {
-                executionOrder.put(m, 11);
+                executionOrder.put(m, 0);
                 continue;
             }
             if (m.isAnnotationPresent(Test.class)) {
@@ -25,7 +25,7 @@ public class AnnotationProcessor {
             } else throw (new IllegalArgumentException());
         }
         executionOrder.entrySet().stream()
-                .sorted(Map.Entry.comparingByValue())
+                .sorted(Map.Entry.<Method, Integer>comparingByValue().reversed())
                 .forEach(entry -> {
                     try {
                         entry.getKey().invoke(cls);
